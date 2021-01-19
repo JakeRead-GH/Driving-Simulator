@@ -219,7 +219,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &92078738
 GameObject:
@@ -2286,7 +2286,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 59.333004, y: -14.2960005, z: 11.743001}
 --- !u!1001 &1754849023
 PrefabInstance:
@@ -2533,7 +2533,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee6e26b629321164f81169335bc84198, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ruleChecker: {fileID: 0}
 --- !u!114 &1884902858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2546,11 +2545,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a932a12b465b62449bd52e30d54d2648, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0
-  wheels:
-  - {fileID: 1888548849}
-  - {fileID: 1942840172}
-  carRb: {fileID: 1884902860}
+  playerRB: {fileID: 1884902860}
   frontDriverWheel: {fileID: 1888548849}
   frontPassengerWheel: {fileID: 1942840172}
   rearDriverWheel: {fileID: 947816732}
@@ -2560,8 +2555,11 @@ MonoBehaviour:
   rearDriverTransform: {fileID: 1805971096}
   rearPassengerTransform: {fileID: 439326579}
   speedometer: {fileID: 916983535}
+  brakeLights: {fileID: 2100000, guid: d1917a35d5ad2344d95e805eb794dd04, type: 2}
+  reverseLights: {fileID: 2100000, guid: 27022d0c6860deb4285921802806eb7b, type: 2}
   maxSteerAngle: 40
   motorForce: 600
+  speed: 0
 --- !u!65 &1884902859
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2888,7 +2886,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 000e268602069ee41b503cc210240ef7, type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 000e268602069ee41b503cc210240ef7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

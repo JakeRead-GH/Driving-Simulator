@@ -10,9 +10,10 @@ public class CheckTrafficLights : MonoBehaviour
     private Rigidbody playerRB;
 
     public bool checking;
-    public bool ruleBroken;
 
+    public string ruleBroken;
     private string lightColour;
+
     private float inverseZ;
 
     private void Start()
@@ -41,38 +42,51 @@ public class CheckTrafficLights : MonoBehaviour
             // Checks if the user stopped. If they didn't the rule is broken.
             if (inverseZ > -0.1f && inverseZ < 0.1f)
             {
-                ruleBroken = false;
+                ruleBroken = "none";
                 checking = false;
+                Debug.Log("PONR Passed");
             }
             else
             {
-                ruleBroken = true;
+                ruleBroken = "Had Time to Stop For Yellow Light But Didn't";
             }
 
             yield return null;
         }
 
-        Debug.Log(ruleBroken);
-        yield return ruleBroken;
+        if (ruleBroken != "none")
+        {
+            Debug.Log(ruleBroken);
+            yield return ruleBroken;
+        }
     }
 
 
     /* Checks the light colour when the user exits the traffic lights trigger.
        If it was red when they left then they ran the light and the rule is broken. */
-    public bool CheckGreenRed()
+    public string CheckGreenRed()
     {
         lightColour = levelUpdater.GetComponent<ChangeTrafficLights>().currentLight;
 
         if (lightColour == "green")
         {
-            ruleBroken = false;
+            Debug.Log("Passed Green Light");
+            ruleBroken = "none";
         }
         else if (lightColour == "red")
         {
-            ruleBroken = true;
+            Debug.Log("Passed Red Light");
+            ruleBroken = "Ran Red Light";
         }
 
-        Debug.Log(ruleBroken);
-        return ruleBroken;
+        if (ruleBroken != "none")
+        {
+            Debug.Log(ruleBroken);
+            return ruleBroken;
+        }
+        else
+        {
+            return null;
+        }
     }
 }

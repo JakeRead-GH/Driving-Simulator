@@ -7,7 +7,8 @@ public class CheckSpeedLimit : MonoBehaviour
     private GameObject player;
 
     public bool checking;
-    public bool ruleBroken;
+
+    public string ruleBroken;
 
     private float speed;
     private int tolerance = 5;
@@ -23,21 +24,26 @@ public class CheckSpeedLimit : MonoBehaviour
        with any speed limit. */
     public IEnumerator CheckRule(int speedLimit)
     {
-        ruleBroken = false;
+        ruleBroken = "none";
 
         while (checking)
         {
             speed = player.GetComponent<CarController>().speed;
 
-            if (speed < speedLimit - tolerance || speed > speedLimit + tolerance)
+            if (speed > speedLimit + tolerance)
             {
-                ruleBroken = true;
+                ruleBroken = "Speeding";
             }
 
             yield return null;
         }
 
-        Debug.Log(ruleBroken);
-        yield return ruleBroken;
+        if (ruleBroken != "none")
+        {
+            Debug.Log(ruleBroken);
+            yield return ruleBroken;
+        }
     }
 }
+
+//speed < speedLimit - tolerance || 

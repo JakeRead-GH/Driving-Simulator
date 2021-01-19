@@ -5,20 +5,26 @@ using UnityEngine;
 public class CheckStopSign : MonoBehaviour
 {
     private GameObject player;
+    private GameObject gameManager;
 
     private Rigidbody playerRB;
 
     public bool checking;
-    public bool ruleBroken;
+
+    public string ruleBroken;
 
     private float inverseZ;
 
     private int requiredChecks = 3;
     private int checksPassed;
+    private int pos;
+    private int oldCount;
+    private int newCount;
 
     private void Start()
     {
         player = GameObject.Find("Player");
+        gameManager = GameObject.Find("GameManager");
 
         playerRB = player.GetComponent<Rigidbody>();
     }
@@ -29,7 +35,6 @@ public class CheckStopSign : MonoBehaviour
     public IEnumerator CheckRule()
     {
         checksPassed = 0;
-        ruleBroken = true;
 
         while (checking)
         {
@@ -50,11 +55,36 @@ public class CheckStopSign : MonoBehaviour
 
         if (checksPassed >= requiredChecks)
         {
-            ruleBroken = false;
+            ruleBroken = "none";
+        }
+        else if (checksPassed >= 1)
+        {
+            ruleBroken = "Did Not Wait For 3 Seconds at Stop Sign";
+        }
+        else
+        {
+            ruleBroken = "Did Not Stop at Stop Sign";
         }
 
-        Debug.Log(ruleBroken);
-        yield return ruleBroken;
+        if (gameManager.GetComponent<GameManager>().brokenRules.Contains(ruleBroken))
+        {
+            pos = gameManager.GetComponent<GameManager>().brokenRules.IndexOf(ruleBroken);
+            oldCount = gameManager.GetComponent<GameManager>().timesBroken[pos];
+            newCount = oldCount + 1;
+            gameManager.GetComponent<GameManager>().timesBroken.Insert(pos, newCount);
+        }
+        else
+        {
+            gameManager.GetComponent<GameManager>().brokenRules.Add(ruleBroken);
+            gameManager.GetComponent<GameManager>().timesBroken.Add(1);
+        }
+
+
+        if (ruleBroken != "none")
+        {
+            Debug.Log(ruleBroken);
+            yield return ruleBroken;
+        }
     }
 
 

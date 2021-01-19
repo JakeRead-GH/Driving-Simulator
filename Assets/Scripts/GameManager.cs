@@ -9,8 +9,10 @@ public class GameManager : MonoBehaviour
     private GameObject levelGenerator;
     private GameObject levelUpdater;
 
-    public bool playing;
+    public List<string> brokenRules;
+    public List<int> timesBroken;
 
+    public bool playing;
 
     /* Controls various game aspects by initialising other controllers and disabling certain scripts
        by turning playing on and off. This is useful for disabling movement in a level selct screen

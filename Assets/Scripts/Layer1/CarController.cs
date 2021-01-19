@@ -8,15 +8,18 @@ public class CarController : MonoBehaviour
     private GameObject gameManager;
 
     // Assigned in Unity.
-    public Rigidbody carRb;
+    public Rigidbody playerRB;
     public WheelCollider frontDriverWheel, frontPassengerWheel, rearDriverWheel, rearPassengerWheel;
     public Transform frontDriverTransform, frontPassengerTransform, rearDriverTransform, rearPassengerTransform;
     public TextMeshProUGUI speedometer;
+    public Material brakeLights;
+    public Material reverseLights;
 
     private float horizontalInput;
     private float verticalInput;
     private float steeringAngle;
     private float brakes;
+    private float inverseZ;
 
     // Assigned in Unity.
     public float maxSteerAngle;
@@ -65,7 +68,15 @@ public class CarController : MonoBehaviour
     // Changes the steering angle to a max of 40 degrees based on user input.
     private void Steer()
     {
-        steeringAngle = maxSteerAngle * horizontalInput;
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            steeringAngle = maxSteerAngle / 10 * horizontalInput;
+        }
+        else
+        {
+            steeringAngle = maxSteerAngle * horizontalInput;
+        }
+
         frontDriverWheel.steerAngle = steeringAngle;
         frontPassengerWheel.steerAngle = steeringAngle;
     }
@@ -77,6 +88,7 @@ public class CarController : MonoBehaviour
         brakes = 20000;
         frontDriverWheel.brakeTorque = brakes;
         frontPassengerWheel.brakeTorque = brakes;
+        brakeLights.SetColor("_EmissionColor", Color.red * 0.25f);
     }
 
 
@@ -87,6 +99,18 @@ public class CarController : MonoBehaviour
         frontPassengerWheel.brakeTorque = 0;
         frontDriverWheel.motorTorque = motorForce * verticalInput;
         frontPassengerWheel.motorTorque = motorForce * verticalInput;
+        brakeLights.SetColor("_EmissionColor", Color.black);
+
+        inverseZ = playerRB.transform.InverseTransformDirection(playerRB.velocity).z;
+
+        if (inverseZ < -1)
+        {
+            reverseLights.SetColor("_EmissionColor", Color.red * 0.5f);
+        }
+        else
+        {
+            reverseLights.SetColor("_EmissionColor", Color.black);
+        }
     }
 
 
@@ -115,7 +139,7 @@ public class CarController : MonoBehaviour
     // Updates the speedometer UI with kph.
     private void UpdateSpeed()
     {
-        speed = Mathf.RoundToInt(carRb.velocity.magnitude * 3.6f);
+        speed = Mathf.RoundToInt(playerRB.velocity.magnitude * 3.6f);
         speedometer.text = "Speed: " + speed + " kph";
     }
 }

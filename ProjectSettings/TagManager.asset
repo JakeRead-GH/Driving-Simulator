@@ -7,6 +7,14 @@ TagManager:
   - StopSignTile
   - 50Zone
   - TrafficLightsTile
+  - KillBox
+  - 100Zone
+  - TriggerEntrance
+  - TriggerExit
+  - 80Zone
+  - 60Zone
+  - 40Zone
+  - 70Zone
   layers:
   - Default
   - TransparentFX
