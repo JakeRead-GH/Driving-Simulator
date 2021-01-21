@@ -34,24 +34,31 @@ public class CheckTrafficLights : MonoBehaviour
         // Checks current light colour from ChangeTrafficLights script.
         lightColour = levelUpdater.GetComponent<ChangeTrafficLights>().currentLight;
 
-        while (checking && lightColour == "yellow")
+        if (lightColour == "yellow")
         {
-            // Inverse finds the transform local to the object rather than globally.
-            inverseZ = playerRB.transform.InverseTransformDirection(playerRB.velocity).z;
-
-            // Checks if the user stopped. If they didn't the rule is broken.
-            if (inverseZ > -0.1f && inverseZ < 0.1f)
+            while (checking)
             {
-                ruleBroken = "none";
-                checking = false;
-                Debug.Log("PONR Passed");
-            }
-            else
-            {
-                ruleBroken = "Had Time to Stop For Yellow Light But Didn't";
-            }
+                // Inverse finds the transform local to the object rather than globally.
+                inverseZ = playerRB.transform.InverseTransformDirection(playerRB.velocity).z;
 
-            yield return null;
+                // Checks if the user stopped. If they didn't the rule is broken.
+                if (inverseZ > -0.1f && inverseZ < 0.1f)
+                {
+                    ruleBroken = "none";
+                    checking = false;
+                    Debug.Log("PONR Passed");
+                }
+                else
+                {
+                    ruleBroken = "Had Time to Stop For Yellow Light But Didn't";
+                }
+
+                yield return null;
+            }
+        }
+        else
+        {
+            ruleBroken = "none";
         }
 
         if (ruleBroken != "none")

@@ -7,6 +7,7 @@ public class CheckSpeedLimit : MonoBehaviour
     private GameObject player;
 
     public bool checking;
+    public bool dontSendRuleBreak;
 
     public string ruleBroken;
 
@@ -30,9 +31,15 @@ public class CheckSpeedLimit : MonoBehaviour
         {
             speed = player.GetComponent<CarController>().speed;
 
-            if (speed > speedLimit + tolerance)
+            if (speed > speedLimit + tolerance && dontSendRuleBreak == false)
             {
                 ruleBroken = "Speeding";
+                Debug.Log(ruleBroken);
+                dontSendRuleBreak = true;
+            }
+            else if (speed < speedLimit + tolerance && dontSendRuleBreak)
+            {
+                dontSendRuleBreak = false;
             }
 
             yield return null;
@@ -40,10 +47,11 @@ public class CheckSpeedLimit : MonoBehaviour
 
         if (ruleBroken != "none")
         {
-            Debug.Log(ruleBroken);
             yield return ruleBroken;
+        }
+        else
+        {
+            yield return null;
         }
     }
 }
-
-//speed < speedLimit - tolerance || 

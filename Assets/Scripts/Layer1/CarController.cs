@@ -67,7 +67,12 @@ public class CarController : MonoBehaviour
             else if (acceleratorPressed)
             {
                 Accelerate(1);
-            }            
+            }
+            else
+            {
+                frontDriverWheel.brakeTorque = 0;
+                frontPassengerWheel.brakeTorque = 0;
+            }
 
             UpdateWheelPoses();
             UpdateSpeed();

@@ -6,6 +6,7 @@ public class CheckStopSign : MonoBehaviour
 {
     private GameObject player;
     private GameObject gameManager;
+    private GameObject screenshotManager;
 
     private Rigidbody playerRB;
 
@@ -20,6 +21,7 @@ public class CheckStopSign : MonoBehaviour
     private int pos;
     private int oldCount;
     private int newCount;
+    private int length;
 
     private void Start()
     {
@@ -72,6 +74,11 @@ public class CheckStopSign : MonoBehaviour
             oldCount = gameManager.GetComponent<GameManager>().timesBroken[pos];
             newCount = oldCount + 1;
             gameManager.GetComponent<GameManager>().timesBroken.Insert(pos, newCount);
+            length = gameManager.GetComponent<GameManager>().brokenRules.Count;
+            //Debug.Log(gameManager.GetComponent<GameManager>().timesBroken[0]);
+            //Debug.Log(length);
+            //Debug.Log(gameManager.GetComponent<GameManager>().brokenRules);
+            //Debug.Log(gameManager.GetComponent<GameManager>().timesBroken);
         }
         else
         {
@@ -79,10 +86,17 @@ public class CheckStopSign : MonoBehaviour
             gameManager.GetComponent<GameManager>().timesBroken.Add(1);
         }
 
+        for (int a = 0; a < gameManager.GetComponent<GameManager>().brokenRules.Count; a++)
+        {
+            Debug.Log(gameManager.GetComponent<GameManager>().brokenRules[a]);
+            Debug.Log(gameManager.GetComponent<GameManager>().timesBroken[a]);
+        }
+
 
         if (ruleBroken != "none")
         {
             Debug.Log(ruleBroken);
+            ScreenshotHandler.TakeScreenshotStatic(1000, 500);
             yield return ruleBroken;
         }
     }
