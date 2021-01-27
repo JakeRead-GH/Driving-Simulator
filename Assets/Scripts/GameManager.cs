@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.IO;
+using UnityEditor;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,18 +14,25 @@ public class GameManager : MonoBehaviour
     private GameObject levelUpdater;
     private GameObject controls;
     private GameObject endScreen;
+    private GameObject screenshotDisplay;
+    private GameObject brokenRuleTextObject;
 
+    public TextMeshProUGUI brokenRuleText;
     public TextMeshProUGUI errors;
 
     public List<string> brokenRules;
     public List<int> timesBroken;
 
+    private Texture2D screenshotTexture;
+
     public bool playing;
 
-    /* Controls various game aspects by initialising other controllers and disabling certain scripts
-       by turning playing on and off. This is useful for disabling movement in a level selct screen
-       in the future. */
-    void Start()
+    private string folderPath;
+    public string screenshotName;
+
+    private int screenshotNumber = 0;
+
+    private void Awake()
     {
         player = GameObject.Find("Player");
         ruleChecker = GameObject.Find("RuleChecker");
@@ -31,27 +40,60 @@ public class GameManager : MonoBehaviour
         levelUpdater = GameObject.Find("LevelUpdater");
         controls = GameObject.Find("Controls");
         endScreen = GameObject.Find("EndScreen");
-
-        //controls.SetActive(true);
-        //endScreen.SetActive(false);
-
-        //levelGenerator.GetComponent<LevelGenerator>().GenerateLevel("StopSignTutorial");
-        playing = true;
-        levelUpdater.GetComponent<LevelUpdater>().StartUpdates();
+        screenshotDisplay = GameObject.Find("ScreenshotDisplay");
+        brokenRuleTextObject = GameObject.Find("BrokenRuleText");
     }
 
-    public void TakeScreenshot()
+    /* Controls various game aspects by initialising other controllers and disabling certain scripts
+       by turning playing on and off. This is useful for disabling movement in a level selct screen
+       in the future. */
+    void Start()
     {
+        //levelGenerator.GetComponent<LevelGenerator>().GenerateLevel("StopSignTutorial");
+        levelUpdater.GetComponent<LevelUpdater>().StartUpdates();
+
+        brokenRuleTextObject.SetActive(false);
+        /*folderPath = Directory.GetCurrentDirectory() + "/Assets/Resources/";
+        Debug.Log(folderPath);
+
+        if (!Directory.Exists(folderPath))
+        {
+            Directory.CreateDirectory(folderPath);
+        }*/
+
+    }
+
+    public IEnumerator DisplayBrokenRule(string brokenRule)
+    {
+        brokenRuleText.text = brokenRule;
+        brokenRuleTextObject.SetActive(true);
+
+        yield return new WaitForSeconds(3);
+
+        brokenRuleTextObject.SetActive(false);
+    }
+
+    public IEnumerator TakeScreenshot()
+    {
+        screenshotName = "Screenshot" + screenshotNumber + ".png";
+        screenshotNumber++;
+        ScreenCapture.CaptureScreenshot(Path.Combine(folderPath, screenshotName));
         Debug.Log("Took Screenshot");
-        ScreenCapture.CaptureScreenshot("RuleBroken");
+
+        yield return null;
+
+        screenshotDisplay.GetComponent<UpdateImage>().UpdateDisplay();
+        Debug.Log("Updated Display");
+
+        //byte[] file = File.ReadAllBytes(folderPath);
+        //screenshotTexture = new Texture2D(4, 4);
+        //screenshotTexture.LoadImage(file);
+        //Debug.Log("Created Texture");
     }
 
     public void ShowEndScreen()
     {
         playing = false;
-
-        //endScreen.SetActive(true);
-        //controls.SetActive(false);
 
         for (int a = 0; a < brokenRules.Count; a++)
         {

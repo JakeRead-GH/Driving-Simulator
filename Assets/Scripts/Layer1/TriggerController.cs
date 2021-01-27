@@ -64,9 +64,7 @@ public class TriggerController : MonoBehaviour
         }
         else if (other.CompareTag("KillBox"))
         {
-            gameObject.transform.position = startingPos;
-            gameObject.transform.rotation = startingRot;
-            playerRB.velocity = new Vector3 (0, 0, 0);
+            ResetPosition();
         }
     }
 
@@ -108,5 +106,13 @@ public class TriggerController : MonoBehaviour
         {
             ruleChecker.GetComponent<RuleChecker>().CheckRules("TrafficLightsEnd");
         }
+    }
+
+
+    public void ResetPosition()
+    {
+        gameObject.transform.position = startingPos;
+        gameObject.transform.rotation = startingRot;
+        playerRB.velocity = new Vector3(0, 0, 0);
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 public class CheckSpeedLimit : MonoBehaviour
 {
     private GameObject player;
+    private GameObject gameManager;
 
     public bool checking;
     public bool dontSendRuleBreak;
@@ -17,6 +18,7 @@ public class CheckSpeedLimit : MonoBehaviour
     private void Start()
     {
         player = GameObject.Find("Player");
+        gameManager = GameObject.Find("GameManager");
     }
 
 
@@ -35,6 +37,7 @@ public class CheckSpeedLimit : MonoBehaviour
             {
                 ruleBroken = "Speeding";
                 Debug.Log(ruleBroken);
+                StartCoroutine(gameManager.GetComponent<GameManager>().DisplayBrokenRule(ruleBroken));
                 dontSendRuleBreak = true;
             }
             else if (speed < speedLimit + tolerance && dontSendRuleBreak)
@@ -42,15 +45,6 @@ public class CheckSpeedLimit : MonoBehaviour
                 dontSendRuleBreak = false;
             }
 
-            yield return null;
-        }
-
-        if (ruleBroken != "none")
-        {
-            yield return ruleBroken;
-        }
-        else
-        {
             yield return null;
         }
     }

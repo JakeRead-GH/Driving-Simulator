@@ -6,6 +6,7 @@ public class CheckTrafficLights : MonoBehaviour
 {
     private GameObject levelUpdater;
     private GameObject player;
+    private GameObject gameManager;
 
     private Rigidbody playerRB;
 
@@ -20,6 +21,7 @@ public class CheckTrafficLights : MonoBehaviour
     {
         levelUpdater = GameObject.Find("LevelUpdater");
         player = GameObject.Find("Player");
+        gameManager = GameObject.Find("GameManager");
 
         playerRB = player.GetComponent<Rigidbody>();
     }
@@ -64,6 +66,7 @@ public class CheckTrafficLights : MonoBehaviour
         if (ruleBroken != "none")
         {
             Debug.Log(ruleBroken);
+            StartCoroutine(gameManager.GetComponent<GameManager>().DisplayBrokenRule(ruleBroken));
             yield return ruleBroken;
         }
     }
@@ -89,6 +92,7 @@ public class CheckTrafficLights : MonoBehaviour
         if (ruleBroken != "none")
         {
             Debug.Log(ruleBroken);
+            StartCoroutine(gameManager.GetComponent<GameManager>().DisplayBrokenRule(ruleBroken));
             return ruleBroken;
         }
         else

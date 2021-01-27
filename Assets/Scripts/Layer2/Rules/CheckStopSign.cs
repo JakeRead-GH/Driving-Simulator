@@ -96,7 +96,10 @@ public class CheckStopSign : MonoBehaviour
         if (ruleBroken != "none")
         {
             Debug.Log(ruleBroken);
-            ScreenshotHandler.TakeScreenshotStatic(1000, 500);
+            StartCoroutine(gameManager.GetComponent<GameManager>().DisplayBrokenRule(ruleBroken));
+            //StartCoroutine(gameManager.GetComponent<GameManager>().TakeScreenshot());
+            //ScreenshotHandler.TakeScreenshotStatic(1000, 500);
+
             yield return ruleBroken;
         }
     }

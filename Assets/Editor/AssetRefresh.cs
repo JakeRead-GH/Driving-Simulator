@@ -1,18 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class AssetRefresh : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public void RefreshAssets()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        AssetDatabase.Refresh();
     }
 }
