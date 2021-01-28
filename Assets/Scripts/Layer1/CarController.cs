@@ -25,6 +25,8 @@ public class CarController : MonoBehaviour
     private float lastClick = 0f;
     private float doubleClickInterval = 0.5f;
 
+    private int directionSwitch = 1;
+
     private string clickType;
     private string gear;
 
@@ -50,7 +52,7 @@ public class CarController : MonoBehaviour
     {
         if (gameManager.GetComponent<GameManager>().playing)
         {
-            GetInput();
+            GetInput(directionSwitch);
             Steer();
 
             if (Input.GetKey(KeyCode.Space) || brakePressed)
@@ -70,6 +72,7 @@ public class CarController : MonoBehaviour
             }
             else
             {
+                directionSwitch = 1;
                 frontDriverWheel.brakeTorque = 0;
                 frontPassengerWheel.brakeTorque = 0;
             }
@@ -96,9 +99,9 @@ public class CarController : MonoBehaviour
 
     /* Gets an input using Unity's built in controls for arrow keys and wasd the
        output value is any float between -1 and 1 based on how long the keys are held. */
-    private void GetInput()
+    private void GetInput(int directionSwitch)
     {
-        horizontalInput = SimpleInput.GetAxis("Horizontal");
+        horizontalInput = SimpleInput.GetAxis("Horizontal") * directionSwitch;
 
         if (SimpleInput.GetKey(KeyCode.W) || SimpleInput.GetKey(KeyCode.S))
         {
@@ -173,6 +176,7 @@ public class CarController : MonoBehaviour
     // Slams the brakes when space is pressed, as opposed to using s to slow normally.
     private void Brake()
     {
+        directionSwitch = -1;
         brakes = 20000;
         frontDriverWheel.brakeTorque = brakes;
         frontPassengerWheel.brakeTorque = brakes;
@@ -182,6 +186,8 @@ public class CarController : MonoBehaviour
     // Changes the players acceleration to a max motor force of 50 based on user input.
     private void Accelerate(float acceleration)
     {
+        directionSwitch = 1;
+
         inverseZ = playerRB.transform.InverseTransformDirection(playerRB.velocity).z;
         frontDriverWheel.brakeTorque = 0;
         frontPassengerWheel.brakeTorque = 0;

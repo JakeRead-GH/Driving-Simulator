@@ -29,6 +29,8 @@ public class ChangeTrafficLights : MonoBehaviour
     {
         lightSetting = 0;
 
+        yield return new WaitUntil(() => gameManager.GetComponent<GameManager>().playing);
+
         while (gameManager.GetComponent<GameManager>().playing)
         {
             lightSetting++;

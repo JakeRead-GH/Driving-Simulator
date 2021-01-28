@@ -7,6 +7,7 @@ public class CheckTrafficLights : MonoBehaviour
     private GameObject levelUpdater;
     private GameObject player;
     private GameObject gameManager;
+    private GameObject ruleChecker;
 
     private Rigidbody playerRB;
 
@@ -17,11 +18,12 @@ public class CheckTrafficLights : MonoBehaviour
 
     private float inverseZ;
 
-    private void Start()
+    private void Awake()
     {
         levelUpdater = GameObject.Find("LevelUpdater");
         player = GameObject.Find("Player");
         gameManager = GameObject.Find("GameManager");
+        ruleChecker = GameObject.Find("RuleChecker");
 
         playerRB = player.GetComponent<Rigidbody>();
     }
@@ -48,11 +50,10 @@ public class CheckTrafficLights : MonoBehaviour
                 {
                     ruleBroken = "none";
                     checking = false;
-                    Debug.Log("PONR Passed");
                 }
                 else
                 {
-                    ruleBroken = "Had Time to Stop For Yellow Light But Didn't";
+                    ruleBroken = "Ran Yellow Light (Could Have Stopped)";
                 }
 
                 yield return null;
@@ -66,38 +67,34 @@ public class CheckTrafficLights : MonoBehaviour
         if (ruleBroken != "none")
         {
             Debug.Log(ruleBroken);
+
+            ruleChecker.GetComponent<RuleChecker>().UpdateLists(ruleBroken);
             StartCoroutine(gameManager.GetComponent<GameManager>().DisplayBrokenRule(ruleBroken));
-            yield return ruleBroken;
         }
     }
 
 
     /* Checks the light colour when the user exits the traffic lights trigger.
        If it was red when they left then they ran the light and the rule is broken. */
-    public string CheckGreenRed()
+    public void CheckGreenRed()
     {
         lightColour = levelUpdater.GetComponent<ChangeTrafficLights>().currentLight;
 
         if (lightColour == "green")
         {
-            Debug.Log("Passed Green Light");
             ruleBroken = "none";
         }
         else if (lightColour == "red")
         {
-            Debug.Log("Passed Red Light");
             ruleBroken = "Ran Red Light";
         }
 
         if (ruleBroken != "none")
         {
             Debug.Log(ruleBroken);
+
+            ruleChecker.GetComponent<RuleChecker>().UpdateLists(ruleBroken);
             StartCoroutine(gameManager.GetComponent<GameManager>().DisplayBrokenRule(ruleBroken));
-            return ruleBroken;
-        }
-        else
-        {
-            return null;
         }
     }
 }

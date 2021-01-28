@@ -20,9 +20,6 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI brokenRuleText;
     public TextMeshProUGUI errors;
 
-    public List<string> brokenRules;
-    public List<int> timesBroken;
-
     private Texture2D screenshotTexture;
 
     public bool playing;
@@ -89,17 +86,6 @@ public class GameManager : MonoBehaviour
         //screenshotTexture = new Texture2D(4, 4);
         //screenshotTexture.LoadImage(file);
         //Debug.Log("Created Texture");
-    }
-
-    public void ShowEndScreen()
-    {
-        playing = false;
-
-        for (int a = 0; a < brokenRules.Count; a++)
-        {
-            errors.text = brokenRules[a] + "\n";
-            //timesBroken[a];
-        }
     }
 }
     

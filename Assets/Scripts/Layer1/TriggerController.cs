@@ -5,6 +5,7 @@ using UnityEngine;
 public class TriggerController : MonoBehaviour
 {
     private GameObject ruleChecker;
+    private GameObject cameras;
     private Vector3 startingPos;
     private Quaternion startingRot;
     private Rigidbody playerRB;
@@ -12,6 +13,7 @@ public class TriggerController : MonoBehaviour
     private void Start()
     {
         ruleChecker = GameObject.Find("RuleChecker");
+        cameras = GameObject.Find("ThirdPersonCam");
         playerRB = gameObject.GetComponent<Rigidbody>();
 
         startingPos = gameObject.transform.position;
@@ -64,7 +66,7 @@ public class TriggerController : MonoBehaviour
         }
         else if (other.CompareTag("KillBox"))
         {
-            ResetPosition();
+            StartCoroutine(ResetPosition());
         }
     }
 
@@ -109,10 +111,29 @@ public class TriggerController : MonoBehaviour
     }
 
 
-    public void ResetPosition()
+    public IEnumerator ResetPosition()
     {
         gameObject.transform.position = startingPos;
         gameObject.transform.rotation = startingRot;
+
+        if (cameras.GetComponent<CameraFollow>().thirdPerson)
+        {
+            cameras.GetComponent<CameraFollow>().rearMirrorCam.SetActive(false);
+            cameras.GetComponent<CameraFollow>().thirdPersonCam.SetActive(true);
+        }
+        else
+        {
+            cameras.GetComponent<CameraFollow>().rearMirrorCam.SetActive(false);
+            cameras.GetComponent<CameraFollow>().firstPersonCam.SetActive(true);
+        }
+
+        gameObject.GetComponent<CarController>().gearStick.value = 0;
+
+        playerRB.constraints = RigidbodyConstraints.FreezeAll;
         playerRB.velocity = new Vector3(0, 0, 0);
+
+        yield return new WaitForSeconds(1);
+
+        playerRB.constraints = RigidbodyConstraints.None;
     }
 }

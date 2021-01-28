@@ -6,6 +6,7 @@ public class CheckSpeedLimit : MonoBehaviour
 {
     private GameObject player;
     private GameObject gameManager;
+    private GameObject ruleChecker;
 
     public bool checking;
     public bool dontSendRuleBreak;
@@ -15,10 +16,11 @@ public class CheckSpeedLimit : MonoBehaviour
     private float speed;
     private int tolerance = 5;
 
-    private void Start()
+    private void Awake()
     {
         player = GameObject.Find("Player");
         gameManager = GameObject.Find("GameManager");
+        ruleChecker = GameObject.Find("RuleChecker");
     }
 
 
@@ -46,6 +48,14 @@ public class CheckSpeedLimit : MonoBehaviour
             }
 
             yield return null;
+        }
+
+        if (ruleBroken != "none")
+        {
+            Debug.Log(ruleBroken);
+
+            ruleChecker.GetComponent<RuleChecker>().UpdateLists(ruleBroken);
+            StartCoroutine(gameManager.GetComponent<GameManager>().DisplayBrokenRule(ruleBroken));
         }
     }
 }

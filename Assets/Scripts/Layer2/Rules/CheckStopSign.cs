@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class CheckStopSign : MonoBehaviour
 {
-    private GameObject player;
     private GameObject gameManager;
+    private GameObject player;
+    private GameObject ruleChecker;
     private GameObject screenshotManager;
 
     private Rigidbody playerRB;
@@ -23,10 +24,11 @@ public class CheckStopSign : MonoBehaviour
     private int newCount;
     private int length;
 
-    private void Start()
+    private void Awake()
     {
-        player = GameObject.Find("Player");
         gameManager = GameObject.Find("GameManager");
+        player = GameObject.Find("Player");
+        ruleChecker = GameObject.Find("RuleChecker");
 
         playerRB = player.GetComponent<Rigidbody>();
     }
@@ -61,46 +63,22 @@ public class CheckStopSign : MonoBehaviour
         }
         else if (checksPassed >= 1)
         {
-            ruleBroken = "Did Not Wait For 3 Seconds at Stop Sign";
+            ruleBroken = "Didn't Stop For 3 Seconds at Stop Sign";
         }
         else
         {
-            ruleBroken = "Did Not Stop at Stop Sign";
+            ruleBroken = "Didn't Stop at Stop Sign";
         }
-
-        if (gameManager.GetComponent<GameManager>().brokenRules.Contains(ruleBroken))
-        {
-            pos = gameManager.GetComponent<GameManager>().brokenRules.IndexOf(ruleBroken);
-            oldCount = gameManager.GetComponent<GameManager>().timesBroken[pos];
-            newCount = oldCount + 1;
-            gameManager.GetComponent<GameManager>().timesBroken.Insert(pos, newCount);
-            length = gameManager.GetComponent<GameManager>().brokenRules.Count;
-            //Debug.Log(gameManager.GetComponent<GameManager>().timesBroken[0]);
-            //Debug.Log(length);
-            //Debug.Log(gameManager.GetComponent<GameManager>().brokenRules);
-            //Debug.Log(gameManager.GetComponent<GameManager>().timesBroken);
-        }
-        else
-        {
-            gameManager.GetComponent<GameManager>().brokenRules.Add(ruleBroken);
-            gameManager.GetComponent<GameManager>().timesBroken.Add(1);
-        }
-
-        for (int a = 0; a < gameManager.GetComponent<GameManager>().brokenRules.Count; a++)
-        {
-            Debug.Log(gameManager.GetComponent<GameManager>().brokenRules[a]);
-            Debug.Log(gameManager.GetComponent<GameManager>().timesBroken[a]);
-        }
-
 
         if (ruleBroken != "none")
         {
             Debug.Log(ruleBroken);
-            StartCoroutine(gameManager.GetComponent<GameManager>().DisplayBrokenRule(ruleBroken));
-            //StartCoroutine(gameManager.GetComponent<GameManager>().TakeScreenshot());
-            //ScreenshotHandler.TakeScreenshotStatic(1000, 500);
 
-            yield return ruleBroken;
+            ruleChecker.GetComponent<RuleChecker>().UpdateLists(ruleBroken);
+            StartCoroutine(gameManager.GetComponent<GameManager>().DisplayBrokenRule(ruleBroken));
+
+            //StartCoroutine(ruleChecker.GetComponent<ruleChecker>().TakeScreenshot());
+            //ScreenshotHandler.TakeScreenshotStatic(1000, 500);
         }
     }
 

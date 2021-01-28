@@ -4,14 +4,13 @@ using UnityEngine;
 
 public class RuleChecker : MonoBehaviour
 {
-    private GameObject ruleChecker;
+    public List<string> brokenRules;
+    public List<int> timesBroken;
 
     public bool correctOrientation;
 
-    private void Start()
-    {
-        ruleChecker = GameObject.Find("RuleChecker");
-    }
+    private int pos;
+    private int count;
 
     // Runs various coroutines and functions based on rule checking triggers from the trigger controller.
     public void CheckRules(string rule)
@@ -20,81 +19,101 @@ public class RuleChecker : MonoBehaviour
         {
             if (rule == "StopSignStart")
             {
-                ruleChecker.GetComponent<CheckStopSign>().checking = true;
-                StartCoroutine(ruleChecker.GetComponent<CheckStopSign>().CheckRule());
+                gameObject.GetComponent<CheckStopSign>().checking = true;
+                StartCoroutine(gameObject.GetComponent<CheckStopSign>().CheckRule());
             }
             else if (rule == "TrafficLightsStart")
             {
-                ruleChecker.GetComponent<CheckTrafficLights>().checking = true;
-                StartCoroutine(ruleChecker.GetComponent<CheckTrafficLights>().CheckPONR());
+                gameObject.GetComponent<CheckTrafficLights>().checking = true;
+                StartCoroutine(gameObject.GetComponent<CheckTrafficLights>().CheckPONR());
             }
         }
         else if (correctOrientation == false)
         {
             if (rule == "StopSignEnd")
             {
-                ruleChecker.GetComponent<CheckStopSign>().checking = false;
+                gameObject.GetComponent<CheckStopSign>().checking = false;
             }
             else if (rule == "TrafficLightsEnd")
             {
-                ruleChecker.GetComponent<CheckTrafficLights>().checking = false;
-                ruleChecker.GetComponent<CheckTrafficLights>().CheckGreenRed();
+                gameObject.GetComponent<CheckTrafficLights>().checking = false;
+                gameObject.GetComponent<CheckTrafficLights>().CheckGreenRed();
             }
         }
 
         if (rule == "SpeedLimit40Start")
         {
-            ruleChecker.GetComponent<CheckSpeedLimit>().checking = true;
-            StartCoroutine(ruleChecker.GetComponent<CheckSpeedLimit>().CheckRule(40));
+            gameObject.GetComponent<CheckSpeedLimit>().checking = true;
+            StartCoroutine(gameObject.GetComponent<CheckSpeedLimit>().CheckRule(40));
         }
         else if (rule == "SpeedLimit40End")
         {
-            ruleChecker.GetComponent<CheckSpeedLimit>().checking = false;
+            gameObject.GetComponent<CheckSpeedLimit>().checking = false;
         }
         else if (rule == "SpeedLimit50Start")
         {
-            ruleChecker.GetComponent<CheckSpeedLimit>().checking = true;
-            StartCoroutine(ruleChecker.GetComponent<CheckSpeedLimit>().CheckRule(50));
+            gameObject.GetComponent<CheckSpeedLimit>().checking = true;
+            StartCoroutine(gameObject.GetComponent<CheckSpeedLimit>().CheckRule(50));
         }
         else if (rule == "SpeedLimit50End")
         {
-            ruleChecker.GetComponent<CheckSpeedLimit>().checking = false;
+            gameObject.GetComponent<CheckSpeedLimit>().checking = false;
         }
         else if (rule == "SpeedLimit60Start")
         {
-            ruleChecker.GetComponent<CheckSpeedLimit>().checking = true;
-            StartCoroutine(ruleChecker.GetComponent<CheckSpeedLimit>().CheckRule(60));
+            gameObject.GetComponent<CheckSpeedLimit>().checking = true;
+            StartCoroutine(gameObject.GetComponent<CheckSpeedLimit>().CheckRule(60));
         }
         else if (rule == "SpeedLimit60End")
         {
-            ruleChecker.GetComponent<CheckSpeedLimit>().checking = false;
+            gameObject.GetComponent<CheckSpeedLimit>().checking = false;
         }
         else if (rule == "SpeedLimit70Start")
         {
-            ruleChecker.GetComponent<CheckSpeedLimit>().checking = true;
-            StartCoroutine(ruleChecker.GetComponent<CheckSpeedLimit>().CheckRule(70));
+            gameObject.GetComponent<CheckSpeedLimit>().checking = true;
+            StartCoroutine(gameObject.GetComponent<CheckSpeedLimit>().CheckRule(70));
         }
         else if (rule == "SpeedLimit70End")
         {
-            ruleChecker.GetComponent<CheckSpeedLimit>().checking = false;
+            gameObject.GetComponent<CheckSpeedLimit>().checking = false;
         }
         else if (rule == "SpeedLimit80Start")
         {
-            ruleChecker.GetComponent<CheckSpeedLimit>().checking = true;
-            StartCoroutine(ruleChecker.GetComponent<CheckSpeedLimit>().CheckRule(80));
+            gameObject.GetComponent<CheckSpeedLimit>().checking = true;
+            StartCoroutine(gameObject.GetComponent<CheckSpeedLimit>().CheckRule(80));
         }
         else if (rule == "SpeedLimit80End")
         {
-            ruleChecker.GetComponent<CheckSpeedLimit>().checking = false;
+            gameObject.GetComponent<CheckSpeedLimit>().checking = false;
         }
         else if (rule == "SpeedLimit100Start")
         {
-            ruleChecker.GetComponent<CheckSpeedLimit>().checking = true;
-            StartCoroutine(ruleChecker.GetComponent<CheckSpeedLimit>().CheckRule(100));
+            gameObject.GetComponent<CheckSpeedLimit>().checking = true;
+            StartCoroutine(gameObject.GetComponent<CheckSpeedLimit>().CheckRule(100));
         }
         else if (rule == "SpeedLimit100End")
         {
-            ruleChecker.GetComponent<CheckSpeedLimit>().checking = false;
+            gameObject.GetComponent<CheckSpeedLimit>().checking = false;
+        }
+    }
+
+
+    public void UpdateLists(string ruleBroken)
+    {
+        if (brokenRules.Contains(ruleBroken))
+        {
+            pos = brokenRules.IndexOf(ruleBroken);
+            count = timesBroken[pos];
+            count++;
+            Debug.Log(ruleBroken + ": " + count);
+            timesBroken.Remove(pos);
+            timesBroken.Insert(pos, count);
+        }
+        else
+        {
+            brokenRules.Add(ruleBroken);
+            Debug.Log("Added " + ruleBroken);
+            timesBroken.Add(1);
         }
     }
 }
