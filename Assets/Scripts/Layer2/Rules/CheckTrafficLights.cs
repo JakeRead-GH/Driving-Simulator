@@ -14,7 +14,8 @@ public class CheckTrafficLights : MonoBehaviour
     public bool checking;
 
     public string ruleBroken;
-    private string lightColour;
+    private string lightColourSG;
+    private string lightColourSR;
 
     private float inverseZ;
 
@@ -33,36 +34,71 @@ public class CheckTrafficLights : MonoBehaviour
        then you have to. Checking begins if the traffic lights trigger is entered during a yellow light.
        the user must then stop before exiting the trigger or the rule is broken. The trigger can be adjusted
        in Unity to change the PONR. */
-    public IEnumerator CheckPONR()
+    public IEnumerator CheckPONR(bool startsGreen)
     {
         // Checks current light colour from ChangeTrafficLights script.
-        lightColour = levelUpdater.GetComponent<ChangeTrafficLights>().currentLight;
 
-        if (lightColour == "yellow")
+        if (startsGreen)
         {
-            while (checking)
+            lightColourSG = levelUpdater.GetComponent<ChangeTrafficLights>().currentLightSG;
+
+            if (lightColourSG == "yellow")
             {
-                // Inverse finds the transform local to the object rather than globally.
-                inverseZ = playerRB.transform.InverseTransformDirection(playerRB.velocity).z;
-
-                // Checks if the user stopped. If they didn't the rule is broken.
-                if (inverseZ > -0.1f && inverseZ < 0.1f)
+                while (checking)
                 {
-                    ruleBroken = "none";
-                    checking = false;
-                }
-                else
-                {
-                    ruleBroken = "Ran Yellow Light (Could Have Stopped)";
-                }
+                    // Inverse finds the transform local to the object rather than globally.
+                    inverseZ = playerRB.transform.InverseTransformDirection(playerRB.velocity).z;
 
-                yield return null;
+                    // Checks if the user stopped. If they didn't the rule is broken.
+                    if (inverseZ > -0.1f && inverseZ < 0.1f)
+                    {
+                        ruleBroken = "none";
+                        checking = false;
+                    }
+                    else
+                    {
+                        ruleBroken = "Ran Yellow Light (Could Have Stopped)";
+                    }
+
+                    yield return null;
+                }
+            }
+            else
+            {
+                ruleBroken = "none";
             }
         }
         else
         {
-            ruleBroken = "none";
+            lightColourSR = levelUpdater.GetComponent<ChangeTrafficLights>().currentLightSR;
+
+            if (lightColourSR == "yellow")
+            {
+                while (checking)
+                {
+                    // Inverse finds the transform local to the object rather than globally.
+                    inverseZ = playerRB.transform.InverseTransformDirection(playerRB.velocity).z;
+
+                    // Checks if the user stopped. If they didn't the rule is broken.
+                    if (inverseZ > -0.1f && inverseZ < 0.1f)
+                    {
+                        ruleBroken = "none";
+                        checking = false;
+                    }
+                    else
+                    {
+                        ruleBroken = "Ran Yellow Light (Could Have Stopped)";
+                    }
+
+                    yield return null;
+                }
+            }
+            else
+            {
+                ruleBroken = "none";
+            }
         }
+        
 
         if (ruleBroken != "none")
         {
@@ -76,18 +112,34 @@ public class CheckTrafficLights : MonoBehaviour
 
     /* Checks the light colour when the user exits the traffic lights trigger.
        If it was red when they left then they ran the light and the rule is broken. */
-    public void CheckGreenRed()
+    public void CheckGreenRed(bool startsGreen)
     {
-        lightColour = levelUpdater.GetComponent<ChangeTrafficLights>().currentLight;
+        if (startsGreen)
+        {
+            lightColourSG = levelUpdater.GetComponent<ChangeTrafficLights>().currentLightSG;
 
-        if (lightColour == "green")
-        {
-            ruleBroken = "none";
+            if (lightColourSG == "green")
+            {
+                ruleBroken = "none";
+            }
+            else if (lightColourSG == "red")
+            {
+                ruleBroken = "Ran Red Light";
+            }
         }
-        else if (lightColour == "red")
+        else
         {
-            ruleBroken = "Ran Red Light";
-        }
+            lightColourSR = levelUpdater.GetComponent<ChangeTrafficLights>().currentLightSR;
+
+            if (lightColourSR == "green")
+            {
+                ruleBroken = "none";
+            }
+            else if (lightColourSR == "red")
+            {
+                ruleBroken = "Ran Red Light";
+            }
+        }        
 
         if (ruleBroken != "none")
         {

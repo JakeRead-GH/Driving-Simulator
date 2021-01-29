@@ -22,10 +22,15 @@ public class RuleChecker : MonoBehaviour
                 gameObject.GetComponent<CheckStopSign>().checking = true;
                 StartCoroutine(gameObject.GetComponent<CheckStopSign>().CheckRule());
             }
-            else if (rule == "TrafficLightsStart")
+            else if (rule == "TrafficLightsStartSG")
             {
                 gameObject.GetComponent<CheckTrafficLights>().checking = true;
-                StartCoroutine(gameObject.GetComponent<CheckTrafficLights>().CheckPONR());
+                StartCoroutine(gameObject.GetComponent<CheckTrafficLights>().CheckPONR(true));
+            }
+            else if (rule == "TrafficLightsStartSR")
+            {
+                gameObject.GetComponent<CheckTrafficLights>().checking = true;
+                StartCoroutine(gameObject.GetComponent<CheckTrafficLights>().CheckPONR(false));
             }
         }
         else if (correctOrientation == false)
@@ -34,10 +39,15 @@ public class RuleChecker : MonoBehaviour
             {
                 gameObject.GetComponent<CheckStopSign>().checking = false;
             }
-            else if (rule == "TrafficLightsEnd")
+            else if (rule == "TrafficLightsSGEnd")
             {
                 gameObject.GetComponent<CheckTrafficLights>().checking = false;
-                gameObject.GetComponent<CheckTrafficLights>().CheckGreenRed();
+                gameObject.GetComponent<CheckTrafficLights>().CheckGreenRed(true);
+            }
+            else if (rule == "TrafficLightsSREnd")
+            {
+                gameObject.GetComponent<CheckTrafficLights>().checking = false;
+                gameObject.GetComponent<CheckTrafficLights>().CheckGreenRed(false);
             }
         }
 

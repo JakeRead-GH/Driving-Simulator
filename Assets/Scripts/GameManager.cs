@@ -47,7 +47,6 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         //levelGenerator.GetComponent<LevelGenerator>().GenerateLevel("StopSignTutorial");
-        levelUpdater.GetComponent<LevelUpdater>().StartUpdates();
 
         brokenRuleTextObject.SetActive(false);
         /*folderPath = Directory.GetCurrentDirectory() + "/Assets/Resources/";

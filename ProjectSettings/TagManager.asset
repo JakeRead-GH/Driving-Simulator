@@ -15,6 +15,7 @@ TagManager:
   - 60Zone
   - 40Zone
   - 70Zone
+  - TrafficLightsSR
   layers:
   - Default
   - TransparentFX

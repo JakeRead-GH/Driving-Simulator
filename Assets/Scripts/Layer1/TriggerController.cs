@@ -62,7 +62,11 @@ public class TriggerController : MonoBehaviour
         }
         else if (other.CompareTag("TrafficLightsTile"))
         {
-            ruleChecker.GetComponent<RuleChecker>().CheckRules("TrafficLightsStart");
+            ruleChecker.GetComponent<RuleChecker>().CheckRules("TrafficLightsStartSG");
+        }
+        else if (other.CompareTag("TrafficLightsSR"))
+        {
+            ruleChecker.GetComponent<RuleChecker>().CheckRules("TrafficLightsStartSR");
         }
         else if (other.CompareTag("KillBox"))
         {
@@ -106,7 +110,11 @@ public class TriggerController : MonoBehaviour
         }
         else if (other.CompareTag("TrafficLightsTile"))
         {
-            ruleChecker.GetComponent<RuleChecker>().CheckRules("TrafficLightsEnd");
+            ruleChecker.GetComponent<RuleChecker>().CheckRules("TrafficLightsSGEnd");
+        }
+        else if (other.CompareTag("TrafficLightsSR"))
+        {
+            ruleChecker.GetComponent<RuleChecker>().CheckRules("TrafficLightsSREnd");
         }
     }
 
