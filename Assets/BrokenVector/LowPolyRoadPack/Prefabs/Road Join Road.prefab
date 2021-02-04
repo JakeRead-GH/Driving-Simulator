@@ -12,6 +12,9 @@ GameObject:
   - component: {fileID: 3352702}
   - component: {fileID: 2376230}
   - component: {fileID: 6412872}
+  - component: {fileID: 9192027738566253347}
+  - component: {fileID: 6518464638748376807}
+  - component: {fileID: 235473355350396108}
   m_Layer: 0
   m_Name: Road Join Road
   m_TagString: Untagged
@@ -94,3 +97,42 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 1869066258e66524dabd0031005b03ff, type: 3}
+--- !u!65 &9192027738566253347
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 171770}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.2809172, y: 1.227169, z: 7.500005}
+  m_Center: {x: 0.640455, y: 0.61912215, z: 3.7499998}
+--- !u!65 &6518464638748376807
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 171770}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.2809162, y: 1.227169, z: 1.2562987}
+  m_Center: {x: 6.87, y: 0.61912215, z: 0.60477793}
+--- !u!65 &235473355350396108
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 171770}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.280917, y: 1.227169, z: 1.3058548}
+  m_Center: {x: 6.87, y: 0.61912215, z: 6.8470736}

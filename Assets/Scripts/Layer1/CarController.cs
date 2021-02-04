@@ -59,7 +59,7 @@ public class CarController : MonoBehaviour
             {
                 if (clickType == "SingleClick")
                 {
-                    Accelerate(-1);
+                    Accelerate(-2);
                 }
                 else
                 {
@@ -101,7 +101,8 @@ public class CarController : MonoBehaviour
        output value is any float between -1 and 1 based on how long the keys are held. */
     private void GetInput(int directionSwitch)
     {
-        horizontalInput = SimpleInput.GetAxis("Horizontal") * directionSwitch;
+        //horizontalInput = SimpleInput.GetAxis("Horizontal") * directionSwitch;
+        horizontalInput = SimpleInput.GetAxis("Horizontal");
 
         if (SimpleInput.GetKey(KeyCode.W) || SimpleInput.GetKey(KeyCode.S))
         {
