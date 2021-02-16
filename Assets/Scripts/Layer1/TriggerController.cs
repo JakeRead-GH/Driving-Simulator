@@ -137,6 +137,10 @@ public class TriggerController : MonoBehaviour
 
         gameObject.GetComponent<CarController>().gearStick.value = 0;
 
+        gameObject.GetComponent<CarController>().StopAllCoroutines();
+        gameObject.GetComponent<CarController>().leftIndicatorMat.SetColor("_EmissionColor", Color.black);
+        gameObject.GetComponent<CarController>().rightIndicatorMat.SetColor("_EmissionColor", Color.black);
+
         playerRB.constraints = RigidbodyConstraints.FreezeAll;
         playerRB.velocity = new Vector3(0, 0, 0);
 

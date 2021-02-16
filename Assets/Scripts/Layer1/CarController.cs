@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class CarController : MonoBehaviour
 {
     private GameObject gameManager;
+    private GameObject ruleChecker;
 
     // Assigned in Unity.
     public Rigidbody playerRB;
@@ -15,7 +16,17 @@ public class CarController : MonoBehaviour
     public TextMeshProUGUI speedometer;
     public Material brakeLights;
     public Material reverseLights;
+    public Material leftIndicatorMat;
+    public Material rightIndicatorMat;
     public Slider gearStick;
+    public Sprite leftIndicatorOff;
+    public Sprite leftIndicatorOn;
+    public Sprite rightIndicatorOff;
+    public Sprite rightIndicatorOn;
+
+    private Image leftIndicator;
+    private Image rightIndicator;
+    private Color transparentYellow;
 
     private float horizontalInput;
     private float verticalInput;
@@ -30,9 +41,16 @@ public class CarController : MonoBehaviour
     private string clickType;
     private string gear;
 
+    public bool turningLeft;
+    public bool turningRight;
+    public bool indicatingLeft;
+    public bool indicatingRight;
+
     private bool acceleratorPressed;
     private bool brakePressed;
-    private bool usingKeyboard;
+    private bool usingKeyboard;    
+    private bool prepStopIndLeft;
+    private bool prepStopIndRight;
 
     // Assigned in Unity.
     public float maxSteerAngle;
@@ -40,10 +58,17 @@ public class CarController : MonoBehaviour
     public float speed;
 
 
-    private void Start()
+    private void Awake()
     {
         gear = "Drive";
         gameManager = GameObject.Find("GameManager");
+        ruleChecker = GameObject.Find("RuleChecker");
+        leftIndicator = GameObject.Find("LeftIndicatorButton").GetComponent<Image>();
+        rightIndicator = GameObject.Find("RightIndicatorButton").GetComponent<Image>();
+        transparentYellow = new Color(192, 121, 0);
+
+        leftIndicatorMat.SetColor("_EmissionColor", Color.black);
+        rightIndicatorMat.SetColor("_EmissionColor", Color.black);
     }
 
 
@@ -171,6 +196,24 @@ public class CarController : MonoBehaviour
 
         frontDriverWheel.steerAngle = steeringAngle;
         frontPassengerWheel.steerAngle = steeringAngle;
+
+        if (steeringAngle < -15)
+        {
+            turningLeft = true;
+        }
+        else
+        {
+            turningLeft = false;
+        }
+
+        if (steeringAngle > 20)
+        {
+            turningRight = true;
+        }
+        else
+        {
+            turningRight = false;
+        }
     }
 
 
@@ -264,5 +307,115 @@ public class CarController : MonoBehaviour
     {
         speed = Mathf.RoundToInt(playerRB.velocity.magnitude * 3.6f);
         speedometer.text = "Speed: " + speed + " kph";
+    }
+
+
+    public void IndicateLeft()
+    {
+        if (!indicatingLeft)
+        {
+            indicatingLeft = true;
+            indicatingRight = false;
+
+            StartCoroutine(FlashLeftIndicator());
+            StartCoroutine(CheckIfTurningLeft());
+        }
+        else
+        {
+            indicatingLeft = false;
+        }
+    }
+
+
+    private IEnumerator FlashLeftIndicator()
+    {
+        while (indicatingLeft)
+        {
+            leftIndicator.sprite = leftIndicatorOn;
+            leftIndicatorMat.SetColor("_EmissionColor", transparentYellow);
+            yield return new WaitForSeconds(0.5f);
+
+            leftIndicator.sprite = leftIndicatorOff;
+            leftIndicatorMat.SetColor("_EmissionColor", Color.black);
+            yield return new WaitForSeconds(0.5f);
+        }
+    }
+
+
+    private IEnumerator CheckIfTurningLeft()
+    {
+        while (indicatingLeft)
+        {
+            if (turningLeft && prepStopIndLeft == false)
+            {
+                prepStopIndLeft = true;
+                Debug.Log("preparing to stop");
+            }
+            else if (!turningLeft && prepStopIndLeft)
+            {
+                prepStopIndLeft = false;
+                indicatingLeft = false;
+                Debug.Log("stopped");
+            }
+
+            yield return null;
+        }
+
+        yield return null;
+    }
+
+
+    public void IndicateRight()
+    {
+        if (!indicatingRight)
+        {
+            indicatingRight = true;
+            indicatingLeft = false;
+
+            StartCoroutine(FlashRightIndicator());
+            StartCoroutine(CheckIfTurningRight());
+        }
+        else
+        {
+            indicatingRight = false;
+        }
+    }
+
+
+    private IEnumerator FlashRightIndicator()
+    {
+        while (indicatingRight)
+        {
+            rightIndicator.sprite = rightIndicatorOn;
+            rightIndicatorMat.SetColor("_EmissionColor", transparentYellow);
+            yield return new WaitForSeconds(0.5f);
+
+            rightIndicator.sprite = rightIndicatorOff;
+            rightIndicatorMat.SetColor("_EmissionColor", Color.black);
+            yield return new WaitForSeconds(0.5f);
+        }
+    }
+
+
+    private IEnumerator CheckIfTurningRight()
+    {
+        while (indicatingRight)
+        {
+            if (turningRight && prepStopIndRight == false)
+            {
+                prepStopIndRight = true;
+                Debug.Log("preparing to stop");
+            }
+            else if (!turningRight && prepStopIndRight)
+            {
+                prepStopIndRight = false;
+                indicatingRight = false;
+                Debug.Log("stopped");
+            }
+
+            yield return null;
+        }
+
+        yield return null;
     }
 }

@@ -122,7 +122,7 @@ public class CheckTrafficLights : MonoBehaviour
             {
                 ruleBroken = "none";
             }
-            else if (lightColourSG == "red")
+            else if (lightColourSG == "red" && !player.GetComponent<CarController>().indicatingRight)
             {
                 ruleBroken = "Ran Red Light";
             }
@@ -135,7 +135,7 @@ public class CheckTrafficLights : MonoBehaviour
             {
                 ruleBroken = "none";
             }
-            else if (lightColourSR == "red")
+            else if (lightColourSR == "red" && !player.GetComponent<CarController>().indicatingRight)
             {
                 ruleBroken = "Ran Red Light";
             }

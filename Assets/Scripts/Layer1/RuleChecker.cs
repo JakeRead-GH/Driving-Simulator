@@ -12,7 +12,8 @@ public class RuleChecker : MonoBehaviour
     private int pos;
     private int count;
 
-    // Runs various coroutines and functions based on rule checking triggers from the trigger controller.
+    // Runs various coroutines and functions based on rule checking triggers from the trigger controller. Rules that don't require triggers
+    // are run from different function, but are listed at the bottom of this script.
     public void CheckRules(string rule)
     {
         if (correctOrientation)
